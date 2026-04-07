@@ -15,4 +15,4 @@ function Players() {
       <PlayerCardList data={data}/>
     </div>
   )
-}
+} 

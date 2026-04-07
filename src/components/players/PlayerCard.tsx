@@ -47,7 +47,6 @@ export const PlayerCard = ({data}: PlayerCardProps) => {
             <p>W-L</p>
           </div>
         </div>
-        
       </CardContent>
     </Card>
   )

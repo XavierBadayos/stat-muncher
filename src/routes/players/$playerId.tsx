@@ -7,4 +7,3 @@ export const Route = createFileRoute('/players/$playerId')({
 function RouteComponent() {
   return <div>Hello "/players/$playerId"!</div>
 }
-    

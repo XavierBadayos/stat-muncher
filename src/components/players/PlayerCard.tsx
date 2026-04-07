@@ -13,7 +13,7 @@ export const PlayerCard = ({data}: PlayerCardProps) => {
       <CardHeader >
           <div className="flex justify-between pb-2">
             <CardTitle><h3>{data.name}</h3></CardTitle>
-            <Badge className="text-xs">{data.teamAbbreviation}</Badge>
+            <Badge className="text-xs" variant={"secondary"}>{data.teamAbbreviation}</Badge>
           </div>
         <CardDescription className="flex justify-between">
           <p>{data.pts} pts</p>

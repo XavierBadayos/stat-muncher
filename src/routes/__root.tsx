@@ -1,13 +1,17 @@
-import { HeadContent, Scripts, createRootRoute } from "@tanstack/react-router"
+import { HeadContent, Outlet, Scripts, createRootRouteWithContext } from "@tanstack/react-router"
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools"
 import { TanStackDevtools } from "@tanstack/react-devtools"
-
 import appCss from "../styles.css?url"
 import { ThemeProvider } from "@/components/theme/theme-provider"
+import type { QueryClient } from "@tanstack/react-query"
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
-export const Route = createRootRoute({
-  head: () => ({
-    meta: [
+interface RouterContext {
+  queryClient: QueryClient
+}
+
+export const Route = createRootRouteWithContext<RouterContext>()({  head: () => ({
+  meta: [
       {
         charSet: "utf-8",
       },
@@ -29,7 +33,7 @@ export const Route = createRootRoute({
   shellComponent: RootDocument,
 })
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function RootDocument({}: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -37,7 +41,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-          {children}
+          <Outlet />
           <TanStackDevtools
               config={{
                 position: "bottom-right",
@@ -49,6 +53,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
                 },
               ]}
             />
+            <ReactQueryDevtools initialIsOpen={false} />
         </ThemeProvider>
         <Scripts />
       </body>

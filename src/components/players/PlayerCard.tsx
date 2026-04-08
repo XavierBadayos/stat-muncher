@@ -1,5 +1,5 @@
 import type { PlayerCardData } from "@/types/PlayerCard"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
+import { Card, CardContent} from "../ui/card"
 import { Badge } from "../ui/badge"
 
 interface PlayerCardProps {

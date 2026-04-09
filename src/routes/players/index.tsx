@@ -1,5 +1,6 @@
 import { fetchAllPlayerStats } from '@/api/playerStatsApi'
 import { PlayerCardList } from '@/components/players/PlayerCardList';
+import { PlayerStatsTable } from '@/components/players/PlayerStatsTable';
 import { ModeToggle } from '@/components/theme/theme-toggle';
 import type { PlayerStats } from '@/types/PlayerStats';
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
@@ -23,7 +24,8 @@ function Players() {
   return (
     <div className='p-12'>
       <ModeToggle />
-      <PlayerCardList data={data as PlayerStats[]}/>
+      {/* <PlayerCardList data={data as PlayerStats[]} /> */}
+      <PlayerStatsTable data={data as PlayerStats[]} />
     </div>
   )
 } 

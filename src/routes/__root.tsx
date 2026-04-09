@@ -10,7 +10,7 @@ interface RouterContext {
   queryClient: QueryClient
 }
 
-export const Route = createRootRouteWithContext<RouterContext>()({  head: () => ({
+export const Route = createRootRouteWithContext<RouterContext>()({head: () => ({
   meta: [
       {
         charSet: "utf-8",

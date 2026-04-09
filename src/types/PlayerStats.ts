@@ -1,0 +1,35 @@
+export interface PlayerStats {
+  id: string;
+  name: string;
+  nickname: string;
+  teamId: string;
+  teamAbbreviation: string;
+  playerImage: string;
+  age: number;
+  gp: number;
+  w: number;
+  l: number;
+  min: number;
+  pts: number;
+  fgm: number;
+  fga: number;
+  fgPct: number;
+  threePm: number;
+  threePa: number;
+  threePct: number;
+  ftm: number;
+  fta: number;
+  ftPct: number;
+  oreb: number;
+  dreb: number;
+  reb: number;
+  ast: number;
+  tov: number;
+  stl: number;
+  blk: number;
+  pf: number;
+  plusMinus: number;
+  fp: number;
+  dd2: number;
+  td3: number;
+}

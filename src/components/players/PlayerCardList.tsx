@@ -1,4 +1,3 @@
-import type { PlayerCardData } from "@/types/PlayerCard"
 import { PlayerCard } from "./PlayerCard"
 import {
   Select,
@@ -13,9 +12,10 @@ import { useState } from "react";
 import { Button } from "../ui/button";
 import { ButtonGroup } from "../ui/button-group";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import type { PlayerStats } from "@/types/PlayerStats";
 
 interface PlayerCardListProps {
-  data: PlayerCardData[]
+  data: PlayerStats[]
 }
 
 export const PlayerCardList = ({ data }: PlayerCardListProps) => {

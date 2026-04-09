@@ -30,5 +30,8 @@ export const IDX = {
   PF: 28,
   PFD: 29,
   PTS: 30,
-  PLUS_MINUS: 31
+  PLUS_MINUS: 31,
+  NBA_FANTASY_PTS: 32,
+  DD2: 33,
+  TD3: 34
 };

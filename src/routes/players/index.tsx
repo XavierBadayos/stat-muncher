@@ -21,10 +21,7 @@ function Players() {
   const {data}  = useSuspenseQuery(playerQuery)
   
   return (
-    <div className='p-12 gap-4'>
-      <Link to="/">
-        <h1 className='text-lg'>INDEX</h1>
-      </Link>
+    <div className='p-12'>
       <ModeToggle />
       <PlayerCardList data={data as PlayerCardData[]}/>
     </div>

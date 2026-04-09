@@ -1,9 +1,9 @@
-import type { PlayerCardData } from "@/types/PlayerCard"
 import { Card, CardContent} from "../ui/card"
 import { Badge } from "../ui/badge"
+import type { PlayerStats } from "@/types/PlayerStats";
 
 interface PlayerCardProps {
-  data: PlayerCardData 
+  data: PlayerStats 
 }
 
 export const PlayerCard = ({ data }: PlayerCardProps) => {

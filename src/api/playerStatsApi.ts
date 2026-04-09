@@ -1,8 +1,8 @@
-import { transformPlayerStatsResponseToPlayerCards } from "@/transformers/playerTransformers";
+import { transformPlayerStatsResponseToPlayerStats } from "@/transformers/playerTransformers";
 import type { AllPlayerStatsResponse } from "@/types/AllPlayerStatsResponse";
-import type { PlayerCardData } from "@/types/PlayerCard";
 import { createServerFn } from "@tanstack/react-start";
 import { playerStatsHeader } from "./headers";
+import type { PlayerStats } from "@/types/PlayerStats";
 
 export const fetchAllPlayerStats = createServerFn({method: "GET"}).handler(async () => {
     const url = `https://stats.nba.com/stats/leaguedashplayerstats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&ISTRound=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PaceAdjust=N&PerMode=PerGame&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&Season=2025-26&SeasonSegment=&SeasonType=Regular%20Season&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=`
@@ -16,7 +16,7 @@ export const fetchAllPlayerStats = createServerFn({method: "GET"}).handler(async
         }
 
         const responseData: AllPlayerStatsResponse = await response.json();
-        const data: PlayerCardData[] = transformPlayerStatsResponseToPlayerCards(responseData);
+        const data: PlayerStats[] = transformPlayerStatsResponseToPlayerStats(responseData);
         return data;
 
     }   catch (error) {

@@ -1,9 +1,9 @@
 import { fetchAllPlayerStats } from '@/api/playerStatsApi'
 import { PlayerCardList } from '@/components/players/PlayerCardList';
 import { ModeToggle } from '@/components/theme/theme-toggle';
-import type { PlayerCardData } from '@/types/PlayerCard';
+import type { PlayerStats } from '@/types/PlayerStats';
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 
 const playerQuery = queryOptions({
   queryKey: ['players'],
@@ -23,7 +23,7 @@ function Players() {
   return (
     <div className='p-12'>
       <ModeToggle />
-      <PlayerCardList data={data as PlayerCardData[]}/>
+      <PlayerCardList data={data as PlayerStats[]}/>
     </div>
   )
 } 

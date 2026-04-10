@@ -12,12 +12,42 @@ interface PlayerStatsHubProps {
   data: PlayerStats[]
 }
 
+interface Category {
+  label: keyof PlayerStats;
+  direction: string;
+}
+
 export const PlayerStatsHub = ({data}: PlayerStatsHubProps) => {
   const [view, setView] = useState("table");
   const rowsPerPage = 50;
   const pages = Array.from({length: Math.ceil(data.length / rowsPerPage)}, (_, i) => i + 1);
   const [page, setPage] = useState("1");
-  const paginatedData = page === "All" ? data : data.slice((Number(page) - Number(1)) * rowsPerPage, Number(page) * rowsPerPage);
+  const [sortedCategory, setSortedCategory] = useState<Category>({label: "pts", direction: "desc"});
+  const paginatedData = page === "All" ? sortData(data, sortedCategory) : sortData(data, sortedCategory).slice((Number(page) - Number(1)) * rowsPerPage, Number(page) * rowsPerPage)  ;
+
+  function sortData(data: PlayerStats[], category: Category): PlayerStats[] {
+    const sorted = [...data];
+
+    if (category.label !== "name" && category.label !== "teamAbbreviation") {
+      if (category.direction === "desc"){
+        return sorted.sort((a, b) => Number(b[category.label]) - Number(a[category.label]))
+      }
+      else if (category.direction === "asc") {
+        return sorted.sort((a, b) => Number(a[category.label]) - Number(b[category.label]))
+      }
+    }
+    else {
+      if (category.direction === "desc"){
+        return sorted.sort((a, b) => String(b[category.label]).toLowerCase().localeCompare(String(a[category.label]).toLowerCase()))
+      }
+      else if (category.direction === "asc") {
+        return sorted.sort((a, b) => String(a[category.label]).toLowerCase().localeCompare(String(b[category.label]).toLowerCase()))
+      }
+    }
+
+    return sorted.sort((a, b) => Number(b[category.label]) - Number(a[category.label]));
+  }
+
 
   function handleForwardNav() {
     const intPage = Number(page)
@@ -38,24 +68,13 @@ export const PlayerStatsHub = ({data}: PlayerStatsHubProps) => {
     setPage(String(intPage - 1));
   }
 
-
   return(
     <div className="flex flex-col gap-3">
       <div className="flex gap-4 items-center justify:start lg:justify-end">
-        <TooltipProvider delay={800} timeout={0}>
-          <ButtonGroup>
-            <Tooltip>
-              <TooltipTrigger render={<Button onClick={() => setView("table")} variant="outline"><TableIcon/></Button>} />
-              <TooltipContent side="bottom" className="max-h-6">
-                <p>Table view</p>
-              </TooltipContent>
-              <TooltipTrigger render={<Button onClick={() => setView("card")} variant="outline"><RectangleVerticalIcon/></Button>} />
-              <TooltipContent side="bottom" className="max-h-6">
-                <p>Card view</p>
-              </TooltipContent>
-            </Tooltip>
-          </ButtonGroup>
-        </TooltipProvider>
+        <ButtonGroup>
+          <Button onClick={() => setView("table")} variant="outline"><TableIcon/></Button>
+          <Button onClick={() => setView("card")} variant="outline"><RectangleVerticalIcon/></Button>
+        </ButtonGroup>
 
         <Select defaultValue={"1"} value={page} onValueChange={(value) => {if (value !== null) setPage(value)}}>
           <SelectTrigger className="w-full max-w-[5rem]">

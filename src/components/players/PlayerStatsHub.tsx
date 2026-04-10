@@ -4,9 +4,10 @@ import { PlayerStatsTable } from "./PlayerStatsTable";
 import { PlayerCardList } from "./PlayerCardList";
 import { Button } from "../ui/button";
 import { ButtonGroup } from "../ui/button-group";
-import { ArrowLeftIcon, ArrowRightIcon, RectangleVerticalIcon, TableIcon } from "lucide-react";
+import { ArrowLeftIcon, ArrowRightIcon, ArrowUpDownIcon, RectangleVerticalIcon, TableIcon } from "lucide-react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
+import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, ComboboxList } from "../ui/combobox";
+import { playerStatsTableColumns } from "./PlayerStatsTableColumns";
 
 interface PlayerStatsHubProps {
   data: PlayerStats[]
@@ -19,11 +20,14 @@ interface Category {
 
 export const PlayerStatsHub = ({data}: PlayerStatsHubProps) => {
   const [view, setView] = useState("table");
+
   const rowsPerPage = 50;
   const pages = Array.from({length: Math.ceil(data.length / rowsPerPage)}, (_, i) => i + 1);
   const [page, setPage] = useState("1");
-  const [sortedCategory, setSortedCategory] = useState<Category>({label: "pts", direction: "desc"});
-  const paginatedData = page === "All" ? sortData(data, sortedCategory) : sortData(data, sortedCategory).slice((Number(page) - Number(1)) * rowsPerPage, Number(page) * rowsPerPage)  ;
+  const [sortedCategory, setSortedCategory] = useState<Category>({label: "gp", direction: "desc"});
+  const paginatedData = page === "All" ? sortData(data, sortedCategory) : sortData(data, sortedCategory).slice((Number(page) - Number(1)) * rowsPerPage, Number(page) * rowsPerPage);
+
+  const categories = playerStatsTableColumns.map(col => ({label: col.label, value: col.value}));
 
   function sortData(data: PlayerStats[], category: Category): PlayerStats[] {
     const sorted = [...data];
@@ -68,6 +72,16 @@ export const PlayerStatsHub = ({data}: PlayerStatsHubProps) => {
     setPage(String(intPage - 1));
   }
 
+  function handleSortDirection() {
+    if (sortedCategory.direction === "asc") {
+      setSortedCategory({label: sortedCategory.label, direction: "desc"});
+    }
+
+    else {
+      setSortedCategory({label: sortedCategory.label, direction: "asc"});
+    }
+  }
+
   return(
     <div className="flex flex-col gap-3">
       <div className="flex gap-4 items-center justify:start lg:justify-end">
@@ -75,6 +89,24 @@ export const PlayerStatsHub = ({data}: PlayerStatsHubProps) => {
           <Button onClick={() => setView("table")} variant="outline"><TableIcon/></Button>
           <Button onClick={() => setView("card")} variant="outline"><RectangleVerticalIcon/></Button>
         </ButtonGroup>
+
+        <ButtonGroup>
+          <Combobox items={categories} autoHighlight>
+            <ComboboxInput size={5} onFocus={(e) => e.target.select()} placeholder="Sort by..." />
+            <ComboboxContent>
+              <ComboboxEmpty>No categories found.</ComboboxEmpty>
+              <ComboboxList>
+                {(item) => (
+                  <ComboboxItem key={item.label} onClick={() => setSortedCategory({label: item.value, direction: sortedCategory.direction})} value={item.label}>
+                    {item.label}
+                  </ComboboxItem>
+                )}
+              </ComboboxList>
+            </ComboboxContent>
+          </Combobox>
+          <Button onClick={handleSortDirection} variant="outline"><ArrowUpDownIcon/></Button>
+        </ButtonGroup>
+        
 
         <Select defaultValue={"1"} value={page} onValueChange={(value) => {if (value !== null) setPage(value)}}>
           <SelectTrigger className="w-full max-w-[5rem]">

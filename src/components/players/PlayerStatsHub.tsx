@@ -4,8 +4,9 @@ import { PlayerStatsTable } from "./PlayerStatsTable";
 import { PlayerCardList } from "./PlayerCardList";
 import { Button } from "../ui/button";
 import { ButtonGroup } from "../ui/button-group";
-import { ArrowLeftIcon, ArrowRightIcon, RectangleVerticalIcon, Table } from "lucide-react";
+import { ArrowLeftIcon, ArrowRightIcon, RectangleVerticalIcon, TableIcon } from "lucide-react";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 
 interface PlayerStatsHubProps {
   data: PlayerStats[]
@@ -39,16 +40,22 @@ export const PlayerStatsHub = ({data}: PlayerStatsHubProps) => {
 
 
   return(
-    <div className="flex flex-col gap-6">
-      <div className="flex gap-8">
-        <ButtonGroup>
-          <Button onClick={() => setView("table")} variant={"outline"}>
-            <Table />
-          </Button>
-          <Button onClick={() => setView("card")} variant={"outline"}>
-            <RectangleVerticalIcon />
-          </Button>
-        </ButtonGroup>
+    <div className="flex flex-col gap-3">
+      <div className="flex gap-4 items-center justify:start lg:justify-end">
+        <TooltipProvider delay={800} timeout={0}>
+          <ButtonGroup>
+            <Tooltip>
+              <TooltipTrigger render={<Button onClick={() => setView("table")} variant="outline"><TableIcon/></Button>} />
+              <TooltipContent side="bottom" className="max-h-6">
+                <p>Table view</p>
+              </TooltipContent>
+              <TooltipTrigger render={<Button onClick={() => setView("card")} variant="outline"><RectangleVerticalIcon/></Button>} />
+              <TooltipContent side="bottom" className="max-h-6">
+                <p>Card view</p>
+              </TooltipContent>
+            </Tooltip>
+          </ButtonGroup>
+        </TooltipProvider>
 
         <Select defaultValue={"1"} value={page} onValueChange={(value) => {if (value !== null) setPage(value)}}>
           <SelectTrigger className="w-full max-w-[5rem]">
@@ -66,6 +73,8 @@ export const PlayerStatsHub = ({data}: PlayerStatsHubProps) => {
             </SelectGroup>
           </SelectContent>
         </Select>
+
+        <div className="text-sm font-medium tracking-tight">of 12</div>
 
         <ButtonGroup aria-label="navigation buttons">
           <Button disabled={Number(page) <= 1 || page === "All"} onClick={handleBackNav} variant={"outline"}><ArrowLeftIcon/></Button>

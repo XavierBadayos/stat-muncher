@@ -5,6 +5,7 @@ import { PlayerCardList } from "./PlayerCardList";
 import { Button } from "../ui/button";
 import { ButtonGroup } from "../ui/button-group";
 import { ArrowLeftIcon, ArrowRightIcon, RectangleVerticalIcon, Table } from "lucide-react";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "../ui/select";
 
 interface PlayerStatsHubProps {
   data: PlayerStats[]
@@ -15,7 +16,7 @@ export const PlayerStatsHub = ({data}: PlayerStatsHubProps) => {
   const rowsPerPage = 50;
   const pages = Array.from({length: Math.ceil(data.length / rowsPerPage)}, (_, i) => i + 1);
   const [page, setPage] = useState("1");
-  const paginatedData = data.slice((Number(page) - Number(1)) * rowsPerPage, Number(page) * rowsPerPage);
+  const paginatedData = page === "All" ? data : data.slice((Number(page) - Number(1)) * rowsPerPage, Number(page) * rowsPerPage);
 
   function handleForwardNav() {
     const intPage = Number(page)
@@ -48,6 +49,23 @@ export const PlayerStatsHub = ({data}: PlayerStatsHubProps) => {
             <RectangleVerticalIcon />
           </Button>
         </ButtonGroup>
+
+        <Select defaultValue={"1"} value={page} onValueChange={(value) => {if (value !== null) setPage(value)}}>
+          <SelectTrigger className="w-full max-w-[5rem]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent alignItemWithTrigger={false}>
+            <SelectGroup>
+              <SelectLabel>Pages</SelectLabel>
+              <SelectItem key={"All"} value={"All"}>All</SelectItem>
+              {pages.map((item) => (
+                <SelectItem key={item} value={item}>
+                  {item}
+                </SelectItem>
+              ))}
+            </SelectGroup>
+          </SelectContent>
+        </Select>
 
         <ButtonGroup aria-label="navigation buttons">
           <Button disabled={Number(page) <= 1 || page === "All"} onClick={handleBackNav} variant={"outline"}><ArrowLeftIcon/></Button>

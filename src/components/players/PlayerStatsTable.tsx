@@ -21,18 +21,18 @@ return (
     </TableHeader>
     <TableBody>  
       {data.map((row) => (
-          <TableRow key={row.id}>
-            {playerStatsTableColumns.map((col) => {
-              const rawValue = row[col.value as keyof PlayerStats];
-              const displayValue = col.format ? col.format(rawValue as number) : rawValue;
-              return (
-                <TableCell key={col.value} className={col.className}>
-                  {displayValue}
-                </TableCell>
-                );
-            })}
-          </TableRow>
-        ))}
+        <TableRow key={row.id}>
+          {playerStatsTableColumns.map((col) => {
+            const rawValue = row[col.value as keyof PlayerStats];
+            const displayValue = col.format ? col.format(rawValue as number) : rawValue;
+            return (
+              <TableCell key={col.value} className={col.className}>
+                {displayValue}
+              </TableCell>
+              );
+          })}
+        </TableRow>
+      ))}
     </TableBody>
   </Table>    
   )

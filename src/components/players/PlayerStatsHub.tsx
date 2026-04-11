@@ -10,6 +10,7 @@ import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, 
 import { playerStatsTableColumns } from "./PlayerStatsTableColumns";
 import type { Filter } from "@/types/FilterType";
 import { StatsFilter } from "./PlayerStatsFilter";
+import { applyFilters } from "./playerStatsFunctions";
 
 interface PlayerStatsHubProps {
   data: PlayerStats[]
@@ -28,7 +29,8 @@ export const PlayerStatsHub = ({data}: PlayerStatsHubProps) => {
   const [page, setPage] = useState("1");
   const [sortedCategory, setSortedCategory] = useState<Category>({label: "pts", direction: "desc"});
   const [filters, setFilters] = useState<Filter[]>([]);
-  const paginatedData = page === "All" ? sortData(data, sortedCategory) : sortData(data, sortedCategory).slice((Number(page) - Number(1)) * rowsPerPage, Number(page) * rowsPerPage);
+  const filteredData = applyFilters(data, filters);
+  const paginatedData = page === "All" ? sortData(filteredData, sortedCategory) : sortData(filteredData, sortedCategory).slice((Number(page) - Number(1)) * rowsPerPage, Number(page) * rowsPerPage);
 
   const categories = playerStatsTableColumns.map(col => ({label: col.label, value: col.value}));
 
@@ -97,12 +99,12 @@ export const PlayerStatsHub = ({data}: PlayerStatsHubProps) => {
         {filters.length > 0 &&
           <div>
             {filters.map(filter => 
-            <StatsFilter data={filter} />
+            <StatsFilter key={filter.index} data={filter} filters={filters} setFilters={setFilters} />
           )}
           </div>
         }
 
-        <Button variant={"outline"} onClick={() => setFilters([...filters, {stat: "Name", operator: "=", value: null, condition: "AND"}])}>
+        <Button variant={"outline"} onClick={() => setFilters([...filters, {index: String(filters.length), stat: "name", operator: "=", value: "", condition: "AND"}])}>
           Add filter  
         </Button>
 

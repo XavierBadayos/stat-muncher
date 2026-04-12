@@ -97,7 +97,7 @@ export const PlayerStatsHub = ({data}: PlayerStatsHubProps) => {
         </ButtonGroup>
 
         {filters.length > 0 &&
-          <div>
+          <div className="flex flex-wrap justify-end">
             {filters.map(filter => 
             <StatsFilter key={filter.index} data={filter} filters={filters} setFilters={setFilters} />
           )}

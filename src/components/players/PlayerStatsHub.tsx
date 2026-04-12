@@ -10,15 +10,11 @@ import { Combobox, ComboboxContent, ComboboxEmpty, ComboboxInput, ComboboxItem, 
 import { playerStatsTableColumns } from "./PlayerStatsTableColumns";
 import type { Filter } from "@/types/FilterType";
 import { StatsFilter } from "./PlayerStatsFilter";
-import { applyFilters } from "./playerStatsFunctions";
+import { applyFilters, sortData } from "./playerStatsFunctions";
+import { useNav, useSortDirection } from "./playerHooks";
 
 interface PlayerStatsHubProps {
   data: PlayerStats[]
-}
-
-interface Category {
-  label: keyof PlayerStats;
-  direction: string;
 }
 
 export const PlayerStatsHub = ({data}: PlayerStatsHubProps) => {
@@ -26,67 +22,13 @@ export const PlayerStatsHub = ({data}: PlayerStatsHubProps) => {
 
   const rowsPerPage = 50;
   const pages = Array.from({length: Math.ceil(data.length / rowsPerPage)}, (_, i) => i + 1);
-  const [page, setPage] = useState("1");
-  const [sortedCategory, setSortedCategory] = useState<Category>({label: "pts", direction: "desc"});
+  const { page, setPage, handleForwardNav, handleBackNav } = useNav(pages.length);
   const [filters, setFilters] = useState<Filter[]>([]);
   const filteredData = applyFilters(data, filters);
+  const { sortedCategory, setSortedCategory, toggleSortDirection } = useSortDirection();
   const paginatedData = page === "All" ? sortData(filteredData, sortedCategory) : sortData(filteredData, sortedCategory).slice((Number(page) - Number(1)) * rowsPerPage, Number(page) * rowsPerPage);
 
   const categories = playerStatsTableColumns.map(col => ({label: col.label, value: col.value}));
-
-  //TODO CLEAN THIS MESS OF A COMPONENT UP! I'VE CREATED BOLOGNESE!
-  function sortData(data: PlayerStats[], category: Category): PlayerStats[] {
-    const sorted = [...data];
-
-    if (category.label !== "name" && category.label !== "teamAbbreviation") {
-      if (category.direction === "desc"){
-        return sorted.sort((a, b) => Number(b[category.label]) - Number(a[category.label]));
-      }
-      else if (category.direction === "asc") {
-        return sorted.sort((a, b) => Number(a[category.label]) - Number(b[category.label]));
-      }
-    }
-    else {
-      if (category.direction === "desc"){
-        return sorted.sort((a, b) => String(b[category.label]).toLowerCase().localeCompare(String(a[category.label]).toLowerCase()));
-      }
-      else if (category.direction === "asc") {
-        return sorted.sort((a, b) => String(a[category.label]).toLowerCase().localeCompare(String(b[category.label]).toLowerCase()));
-      }
-    }
-
-    return sorted.sort((a, b) => Number(b[category.label]) - Number(a[category.label]));
-  }
-
-
-  function handleForwardNav() {
-    const intPage = Number(page)
-    if (intPage >= pages.length) {
-      return
-    }
-
-    setPage(String(intPage + 1));
-  }
-
-  function handleBackNav() {
-    const intPage = Number(page);
-
-    if (intPage <= 1) {
-      return
-    }
-
-    setPage(String(intPage - 1));
-  }
-
-  function handleSortDirection() {
-    if (sortedCategory.direction === "asc") {
-      setSortedCategory({label: sortedCategory.label, direction: "desc"});
-    }
-
-    else {
-      setSortedCategory({label: sortedCategory.label, direction: "asc"});
-    }
-  }
 
   return(
     <div className="flex flex-col gap-3">
@@ -122,7 +64,7 @@ export const PlayerStatsHub = ({data}: PlayerStatsHubProps) => {
               </ComboboxList>
             </ComboboxContent>
           </Combobox>
-          <Button onClick={handleSortDirection} variant="outline"><ArrowUpDownIcon/></Button>
+          <Button onClick={toggleSortDirection} variant="outline"><ArrowUpDownIcon/></Button>
         </ButtonGroup>
         
 

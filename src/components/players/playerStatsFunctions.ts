@@ -1,4 +1,6 @@
+import type { Category } from "@/types/Category";
 import type { Filter } from "@/types/FilterType";
+import type { PlayerStats } from "@/types/PlayerStats";
 
 export const applyFilters = (dataset: any[], filters: Filter[]) => {
   if (!filters || filters.length === 0) return dataset;
@@ -46,3 +48,26 @@ export const applyFilters = (dataset: any[], filters: Filter[]) => {
     return rowPasses;
   });
 };
+
+export function sortData(data: PlayerStats[], category: Category): PlayerStats[] {
+  const sorted = [...data];
+
+  if (category.label !== "name" && category.label !== "teamAbbreviation") {
+    if (category.direction === "desc"){
+      return sorted.sort((a, b) => Number(b[category.label]) - Number(a[category.label]));
+    }
+    else if (category.direction === "asc") {
+      return sorted.sort((a, b) => Number(a[category.label]) - Number(b[category.label]));
+    }
+  }
+  else {
+    if (category.direction === "desc"){
+      return sorted.sort((a, b) => String(b[category.label]).toLowerCase().localeCompare(String(a[category.label]).toLowerCase()));
+    }
+    else if (category.direction === "asc") {
+      return sorted.sort((a, b) => String(a[category.label]).toLowerCase().localeCompare(String(b[category.label]).toLowerCase()));
+    }
+  }
+
+  return sorted.sort((a, b) => Number(b[category.label]) - Number(a[category.label]));
+}

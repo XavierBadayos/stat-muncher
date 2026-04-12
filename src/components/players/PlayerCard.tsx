@@ -14,6 +14,7 @@ export const PlayerCard = ({ data }: PlayerCardProps) => {
           className="w-full object-cover"
           src={data.playerImage}
           alt={data.nickname as string}
+          loading="lazy"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/15 to-transparent dark:from-black/40 dark:via-black/10 dark:to-transparent"/>
         <div className="absolute bottom-3 left-4 right-4 flex justify-between items-end text-white">

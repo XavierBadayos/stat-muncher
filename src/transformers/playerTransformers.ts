@@ -2,6 +2,8 @@ import type { AllPlayerStatsResponse } from "@/types/AllPlayerStatsResponse"
 import type { PlayerCardData } from "@/types/PlayerCard"
 import { IDX } from "./AllPlayerStatsIndexMap";
 import type { PlayerStats } from "@/types/PlayerStats";
+import type { AllPlayerAdvancedStatsResponse } from "@/types/AllPlayerStatsAdvancedResponse";
+import type { AdvancedPlayerStats } from "@/types/PlayerAdvancedStats";
 
 export function transformPlayerStatsResponseToPlayerCards(response: AllPlayerStatsResponse): PlayerCardData[] {
     const rowSets = response.resultSets[0].rowSet;
@@ -70,4 +72,16 @@ export function transformPlayerStatsResponseToPlayerStats(response: AllPlayerSta
     }))
 
     return playerStats;
+}
+
+export function transformAdvancedPlayerStatsToPlayerStats(response: AllPlayerAdvancedStatsResponse): AdvancedPlayerStats[] {
+    const rowSets = response.resultSets[0].rowSet;
+    const advancedPlayerStats = rowSets.map(row => ({
+        id: String(row[0]),
+        trueShooting: Number(row[29]),
+        usagePct: Number(row[30]),
+        pace: Number(row[33])
+    }))
+
+    return advancedPlayerStats;
 }

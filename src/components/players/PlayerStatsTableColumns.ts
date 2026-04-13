@@ -44,4 +44,8 @@ export const playerStatsTableColumns = [
   { label: "DD2", value: "dd2", className: "text-right", format: (v: number) => v?.toFixed(1) },
   { label: "TD3", value: "td3", className: "text-right", format: (v: number) => v?.toFixed(1) },
   { label: "+/-", value: "plusMinus", className: "text-right", format: (v: number) => v?.toFixed(1) },
+  { label: "TS%", value: "trueShooting", className: "text-right", format: (v: number) => v?.toFixed(1) },
+  { label: "USG%", value: "usagePct", className: "text-right", format: (v: number) => v?.toFixed(1) },
+  { label: "PACE", value: "pace", className: "text-right", format: (v: number) => v?.toFixed(1) },
+
 ];
